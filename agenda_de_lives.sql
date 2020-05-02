@@ -58,6 +58,7 @@ insert into lives(codigo, artista, data_hora) VALUES (4,10,'2020-06-09 22:00:00'
 insert into lives(codigo, artista, data_hora) VALUES (5,9,'2020-06-15 22:00:00');
 insert into lives(codigo, artista, data_hora) VALUES (6,4,'2020-07-15 22:00:00');
 
+
 -- violacao de constraint de data_hora
 insert into lives(codigo, artista, data_hora) VALUES (7,8,'2020-01-15 15:00:00');
 
@@ -79,6 +80,78 @@ select * from artistas;
 select * from lives;
 select current_timestamp;
 
+
+
+-- O nome e gênero dos artistas, a data/hora da live e a URL das lives em que o código do artista seja diferente de 1 (um)
+
+select 
+      artistas.nome, artistas.genero , lives.data_hora, lives_plataformas.url 
+from 
+      artistas, lives, lives_plataformas 
+where 
+     (artistas.codigo = lives.artista) 
+     and (lives.codigo = lives_plataformas.live ) 
+     and (artistas.codigo <> 1)
+
+
+
+-- O nome do artista, a data/hora da live, o nome da plataforma e a URL das próximas 3 lives (apenas lives futuras)
+
+select 
+      artistas.nome, lives.data_hora, plataformas.nome, lives_plataformas.url 
+from 
+      artistas, lives, lives_plataformas, plataformas 
+where 
+      (artistas.codigo = lives.artista) 
+	and (lives.codigo = lives_plataformas.live ) 
+	and (plataformas.codigo = lives_plataformas.live )
+	and (current_timestamp < lives.data_hora) 
+limit 3
+
+
+--O nome e gênero dos artistas que não tem lives cadastradas
+
+select 
+      artistas.nome,  artistas.genero 
+from 
+	artistas
+	  
+where 
+      artistas.codigo not in (
+	  select
+	  	artistas.codigo
+	  from 
+	      artistas, lives 
+	  where 
+	      artistas.codigo = lives.artista
+	  )
+	  
+
+
+--O nome do artista, a data/hora da live e a URL das lives de gênero “Rock”
+
+select 
+      artistas.nome, lives.data_hora, lives_plataformas.url 
+from 
+	artistas, lives, lives_plataformas 
+where 
+      (artistas.codigo = lives.artista) 
+	and (lives.codigo = lives_plataformas.live ) 
+	and (artistas.genero = 'Rock')
+
+
+--agendadas para a semana de “04/05/2020” a “10/05/2020”, ordenados por data/hora
+
+select 
+      artistas.nome, lives.data_hora, lives_plataformas.url 
+from 
+	artistas, lives, lives_plataformas 
+where 
+      (artistas.codigo = lives.artista) 
+	and (lives.data_hora >='2020-05-04 00:00:00'  and lives.data_hora <= '2020-05-10 23:59:59')
+	and (lives.codigo = lives_plataformas.live ) 
+order by  
+      lives.data_hora
 
 -- sessao de drop/truncate
 
