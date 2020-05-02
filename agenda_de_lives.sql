@@ -50,14 +50,14 @@ VALUES (1, 'Youtube'),
        (3, 'Site oficial'),
        (4, 'Twitter');
 
--- insert de 7 lives
+-- insert de 6 lives
 insert into lives(codigo, artista, data_hora) VALUES (1,3,'2020-08-15 17:45:00');
 insert into lives(codigo, artista, data_hora) VALUES (2,2,'2020-07-30 22:00:00');
 insert into lives(codigo, artista, data_hora) VALUES (3,5,'2020-06-20 22:00:00');
 insert into lives(codigo, artista, data_hora) VALUES (4,10,'2020-06-09 22:00:00');
 insert into lives(codigo, artista, data_hora) VALUES (5,9,'2020-06-15 22:00:00');
 insert into lives(codigo, artista, data_hora) VALUES (6,4,'2020-07-15 22:00:00');
-insert into lives(codigo, artista, data_hora) VALUES (7,4,'2020-05-09 22:00:00');
+
 
 -- violacao de constraint de data_hora
 insert into lives(codigo, artista, data_hora) VALUES (7,8,'2020-01-15 15:00:00');
@@ -100,11 +100,12 @@ where
 select 
       artistas.nome, lives.data_hora, plataformas.nome, lives_plataformas.url 
 from 
-	  artistas, lives, lives_plataformas, plataformas 
-where (artistas.codigo = lives.artista) 
-	  and (lives.codigo = lives_plataformas.live ) 
-	  and (plataformas.codigo = lives_plataformas.live )
-	  and (current_timestamp < lives.data_hora) 
+	artistas, lives, lives_plataformas, plataformas 
+where (
+      artistas.codigo = lives.artista) 
+	and (lives.codigo = lives_plataformas.live ) 
+	and (plataformas.codigo = lives_plataformas.live )
+	and (current_timestamp < lives.data_hora) 
 limit 3
 
 
@@ -113,15 +114,16 @@ limit 3
 select 
       artistas.nome,  artistas.genero 
 from 
-	  artistas
+	artistas
 	  
-where not exists (
+where 
+      artistas.codigo not in (
 	  select
-	  		artistas.codigo, lives.artista 
+	  	artistas.codigo
 	  from 
-	        artistas, lives 
+	      artistas, lives 
 	  where 
-	  		artistas.codigo = lives.artista
+	      artistas.codigo = lives.artista
 	  )
 	  
 
@@ -131,11 +133,11 @@ where not exists (
 select 
       artistas.nome, lives.data_hora, lives_plataformas.url 
 from 
-	  artistas, lives, lives_plataformas 
+	artistas, lives, lives_plataformas 
 where 
       (artistas.codigo = lives.artista) 
-	  and (lives.codigo = lives_plataformas.live ) 
-	  and (artistas.genero = 'Rock')
+	and (lives.codigo = lives_plataformas.live ) 
+	and (artistas.genero = 'Rock')
 
 
 --agendadas para a semana de “04/05/2020” a “10/05/2020”, ordenados por data/hora
@@ -143,10 +145,11 @@ where
 select 
       artistas.nome, lives.data_hora, lives_plataformas.url 
 from 
-	  artistas, lives, lives_plataformas 
-where (artistas.codigo = lives.artista) 
-	  and (lives.codigo = lives_plataformas.live ) 
-	  and (lives.data_hora between to_date('2020/05/04', 'yyyy-mm-dd')  and to_date('2020/05/10', 'yyyy-mm-dd'))
+	artistas, lives, lives_plataformas 
+where 
+      (artistas.codigo = lives.artista) 
+	and (lives.data_hora >='2020-05-04 00:00:00'  and lives.data_hora <= '2020-05-10 23:59:59')
+	and (lives.codigo = lives_plataformas.live ) 
 order by  
       lives.data_hora
 
