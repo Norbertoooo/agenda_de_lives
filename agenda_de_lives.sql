@@ -100,9 +100,9 @@ where
 select 
       artistas.nome, lives.data_hora, plataformas.nome, lives_plataformas.url 
 from 
-	artistas, lives, lives_plataformas, plataformas 
-where (
-      artistas.codigo = lives.artista) 
+      artistas, lives, lives_plataformas, plataformas 
+where 
+      (artistas.codigo = lives.artista) 
 	and (lives.codigo = lives_plataformas.live ) 
 	and (plataformas.codigo = lives_plataformas.live )
 	and (current_timestamp < lives.data_hora) 
