@@ -153,6 +153,32 @@ where
 order by  
       lives.data_hora
 
+
+-- A data/hora da live, o nome da plataforma e a URL das lives que ocorrem após a live mais antiga realizada na plataforma “Instagram”
+
+select 
+	lives.data_hora , plataformas.nome ,lives_plataformas.url
+from 
+	lives, plataformas , lives_plataformas 
+where
+	lives.data_hora > (
+	select 
+		lives.data_hora 
+	from 
+		lives_plataformas , plataformas , lives 
+	where
+		lives_plataformas.plataforma = plataformas.codigo and plataformas.nome ilike 'instagram'
+	order by 
+		lives.data_hora  
+	limit 1)
+    and 
+    	lives.codigo = lives_plataformas.live 
+    and 
+    	plataformas.codigo = lives_plataformas.plataforma 
+    order by 
+    	lives.data_hora 
+    
+
 -- sessao de drop/truncate
 
 drop database agenda_de_lives;
