@@ -91,7 +91,7 @@ from
 where 
      (artistas.codigo = lives.artista) 
      and (lives.codigo = lives_plataformas.live ) 
-     and (artistas.codigo <> 1)
+     and (artistas.codigo <> 1);
 
 
 
@@ -106,7 +106,7 @@ where
 	and (lives.codigo = lives_plataformas.live ) 
 	and (plataformas.codigo = lives_plataformas.live )
 	and (current_timestamp < lives.data_hora) 
-limit 3
+limit 3;
 
 
 --O nome e gênero dos artistas que não tem lives cadastradas
@@ -124,7 +124,7 @@ where
 	      artistas, lives 
 	  where 
 	      artistas.codigo = lives.artista
-	  )
+	  );
 	  
 
 
@@ -137,7 +137,7 @@ from
 where 
       (artistas.codigo = lives.artista) 
 	and (lives.codigo = lives_plataformas.live ) 
-	and (artistas.genero = 'Rock')
+	and (artistas.genero = 'Rock');
 
 
 --agendadas para a semana de “04/05/2020” a “10/05/2020”, ordenados por data/hora
@@ -151,7 +151,7 @@ where
 	and (lives.data_hora >='2020-05-04 00:00:00'  and lives.data_hora <= '2020-05-10 23:59:59')
 	and (lives.codigo = lives_plataformas.live ) 
 order by  
-      lives.data_hora
+      lives.data_hora;
 
 
 -- A data/hora da live, o nome da plataforma e a URL das lives que ocorrem após a live mais antiga realizada na plataforma “Instagram”
@@ -176,7 +176,7 @@ where
     and 
     	plataformas.codigo = lives_plataformas.plataforma 
     order by 
-    	lives.data_hora 
+    	lives.data_hora;
     
 
 -- sessao de drop/truncate
